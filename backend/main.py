@@ -11,10 +11,11 @@ app = FastAPI()
 # Enable cors for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=["https://graph-search-visual.vercel.app",],
+    allow_origin_regex=r"^https://graph-search-visual.*\.vercel\.app$",
     allow_methods=["*"],
     allow_headers=["*"],
+    allow_credentials=True,
 )
 
 # map each algorithm call
