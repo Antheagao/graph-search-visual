@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './App.css';
 import Settings from './components/Settings';
 import Grid from './components/Grid';
@@ -15,22 +15,48 @@ function App() {
     };
 
     try {
-      const response = await fetch('http://localhost:5000/solve', { // Replace with your backend URL
+      const response = await fetch('http://127.0.0.1:8000/solve', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
-      // For now, just log the response
       const result = await response.json();
       console.log(result);
 
-      // Example: update stats if backend responds
-      if (result.stats) {
-        setStats(result.stats);
-      }
+      // reset visualization
+      setVisitedNodes([]);
+      setPathNodes([]);
+      setStats({
+        solved: result.stats.solved,
+        time: result.stats.time,
+        nodesExpanded: 0, // will increment as nodes are displayed
+        pathLength: result.stats.pathLength,
+      });
+
+      const visitedOrder = result.visited || [];
+      const path = result.path || [];
+
+      // animate visited nodes
+      visitedOrder.forEach((node, i) => {
+        setTimeout(() => {
+          setVisitedNodes((prev) => [...prev, node]);
+          setStats((prevStats) => ({
+            ...prevStats,
+            nodesExpanded: prevStats.nodesExpanded + 1,
+          }));
+        }, i * 5); // 5ms per visited node
+      });
+
+      // animate path after all visited nodes
+      setTimeout(() => {
+        path.forEach((node, i) => {
+          setTimeout(() => {
+            setPathNodes((prev) => [...prev, node]);
+          }, i * 10); // 10ms per path node
+        });
+      }, visitedOrder.length * 5);
+
     } catch (error) {
       console.error('Error sending grid to backend:', error);
     }
@@ -39,7 +65,7 @@ function App() {
   const [settings, setSettings] = useState({
     algorithm: "DFS",
     rows: 50,
-    cols: 90,
+    cols: 50,
   });
 
   const [stats, setStats] = useState({
@@ -49,7 +75,6 @@ function App() {
     pathLength: 0,
   });
 
-  // Start and End nodes
   const [start, setStart] = useState({ row: 0, col: 0 });
   const [end, setEnd] = useState({ row: settings.rows - 1, col: settings.cols - 1 });
 
@@ -58,6 +83,9 @@ function App() {
       .fill(0)
       .map(() => Array(settings.cols).fill(0))
   );
+
+  const [visitedNodes, setVisitedNodes] = useState([]);
+  const [pathNodes, setPathNodes] = useState([]);
 
   const generateGrid = () => {
     const newGrid = Array(settings.rows)
@@ -73,40 +101,20 @@ function App() {
     newGrid[end.row][end.col] = 0;
 
     setGridData(newGrid);
-
-    setStats({
-      solved: false,
-      time: 0,
-      nodesExpanded: 0,
-      pathLength: 0,
-    });
+    setStats({ solved: false, time: 0, nodesExpanded: 0, pathLength: 0 });
+    setVisitedNodes([]);
+    setPathNodes([]);
   };
 
-  const redoWalls = () => {
-    const newGrid = Array(settings.rows)
-      .fill(0)
-      .map(() =>
-        Array(settings.cols)
-          .fill(0)
-          .map(() => (Math.random() > 0.7 ? 1 : 0)) // random walls
-      );
+  const redoWalls = generateGrid;
 
-    // Ensure start and end are open
-    newGrid[start.row][start.col] = 0;
-    newGrid[end.row][end.col] = 0;
-
-    setGridData(newGrid);
-    setStats({
-      solved: false,
-      time: 0,
-      nodesExpanded: 0,
-      pathLength: 0,
-    });
-  };
+  // ✅ call generateGrid when component mounts
+  useEffect(() => {
+    generateGrid();
+  }, []); // empty dependency array ensures it runs once
 
   return (
     <div className="h-screen w-screen flex">
-      {/* Settings panel */}
       <Settings
         settings={settings}
         setSettings={setSettings}
@@ -116,13 +124,14 @@ function App() {
         onSolve={solve}
       />
 
-      {/* Grid panel */}
       <Grid
         rows={settings.rows}
         cols={settings.cols}
         gridData={gridData}
         start={start}
         end={end}
+        visitedNodes={visitedNodes}
+        pathNodes={pathNodes}
       />
     </div>
   );

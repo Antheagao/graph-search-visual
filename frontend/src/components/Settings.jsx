@@ -1,4 +1,4 @@
-import React from "react"; 
+import React from "react";
 
 function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
   const handleAlgorithmChange = (e) => {
@@ -7,18 +7,19 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
   };
 
   return (
-    <div className="w-1/6 bg-neutral-900 p-4 border-r border-gray-300 h-full flex flex-col">
+    <div className="w-1/6 bg-neutral-900 p-6 border-r border-gray-700 flex flex-col justify-between">
       
-      {/* Top Half: Algorithm & Controls */}
-      <div className="flex-1 flex flex-col">
-        <h2 className="text-xl font-bold mb-4">Settings</h2>
+      {/* Top Section: Algorithm & Controls */}
+      <div className="flex flex-col gap-6">
+        <h2 className="text-2xl font-bold text-white">Settings</h2>
+        
         <div className="flex flex-col gap-4">
-          <label>
+          <label className="text-gray-200 font-medium">
             Algorithm Type:
             <select
               value={settings.algorithm}
               onChange={handleAlgorithmChange}
-              className="border bg-neutral-900 p-1 w-full mt-1"
+              className="mt-1 p-2 rounded-md bg-neutral-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option>DFS</option>
               <option>BFS</option>
@@ -26,31 +27,45 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
               <option>A*</option>
             </select>
           </label>
-          
+
           <button
             onClick={onResetWalls}
-            className="bg-gray-500 text-white p-2 rounded mt-2 transition-transform transform hover:scale-103"
+            className="bg-gray-600 text-white p-2 rounded-md shadow-md transition-transform transform hover:scale-105 hover:bg-gray-500"
           >
             Redo Walls
           </button>
 
           <button
             onClick={onSolve}
-            className="bg-blue-500 text-white p-2 rounded mt-2 transition-transform transform hover:scale-103"
+            className="bg-blue-600 text-white p-2 rounded-md shadow-md transition-transform transform hover:scale-105 hover:bg-blue-500"
           >
             Solve
           </button>
         </div>
       </div>
 
-      {/* Bottom Half: Stats */}
-      <div className="flex-1 flex flex-col mt-6 overflow-y-auto">
-        <h2 className="text-xl font-bold mb-2">Stats</h2>
-        <div className="flex flex-col gap-2 text-gray-200">
-          <div>Solved? {stats.solved ? "Yes" : "No"}</div>
-          <div>Time taken: {stats.time} ms</div>
-          <div>Nodes expanded: {stats.nodesExpanded}</div>
-          <div>Path length: {stats.pathLength}</div>
+      {/* Bottom Section: Stats */}
+      <div className="mt-8">
+        <h2 className="text-xl font-bold text-white mb-4">Stats</h2>
+        <div className="flex flex-col gap-3 text-gray-200">
+          <div className="flex justify-between">
+            <span>Solution found:</span>
+            <span className={stats.solved ? "text-green-400" : "text-red-400"}>
+              {stats.solved ? "Yes" : "No"}
+            </span>
+          </div>
+          <div className="flex justify-between">
+            <span>Time taken:</span>
+            <span>{stats.time.toFixed(3)} ms</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Nodes expanded:</span>
+            <span>{stats.nodesExpanded}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Path length:</span>
+            <span>{stats.pathLength}</span>
+          </div>
         </div>
       </div>
     </div>
