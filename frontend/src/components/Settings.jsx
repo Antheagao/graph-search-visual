@@ -21,11 +21,11 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
               onChange={handleAlgorithmChange}
               className="mt-1 p-2 rounded-md bg-neutral-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
-              <option>DFS</option>
-              <option>BFS</option>
-              <option>Dijkstra</option>
               <option>A*</option>
               <option>Bidirectional BFS</option>
+              <option>Dijkstra</option>
+              <option>BFS</option>
+              <option>DFS</option>
             </select>
           </label>
 
@@ -57,7 +57,7 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
           </div>
           <div className="flex justify-between">
             <span>Time taken:</span>
-            <span>{stats.time.toFixed(3)} ms</span>
+            <span>{(stats.time * 1000).toFixed(2)} µs</span>
           </div>
           <div className="flex justify-between">
             <span>Nodes expanded:</span>
@@ -68,6 +68,42 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
             <span>{stats.pathLength}</span>
           </div>
         </div>
+      </div>
+
+      {/* Color Legend */}
+      <div className="mt-8">
+        <h2 className="text-xl font-bold text-white mb-2">Legend</h2>
+        <div className="flex flex-col gap-2 text-gray-200">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-gray-700 border border-gray-400"></div>
+            <span>Wall</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-gray-200 border border-gray-400"></div>
+            <span>Empty Node</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-green-500"></div>
+            <span>Start Node</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-red-500"></div>
+            <span>End Node</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-blue-400"></div>
+            <span>Visited Node</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-4 bg-yellow-400"></div>
+            <span>Path Node</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer with copyright */}
+      <div className="text-gray-400 text-sm mt-4 text-center">
+        &copy; 2025 Anthony Mendez
       </div>
     </div>
   );

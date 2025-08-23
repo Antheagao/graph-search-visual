@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Literal, List
-from algorithms import bfs, dfs, dijkstra, a_star
+from algorithms import bfs, dfs, dijkstra, a_star, bi_bfs
 
 
 app = FastAPI() 
@@ -23,11 +23,12 @@ algorithm_map = {
     "DFS": dfs.dfs,
     "Dijkstra": dijkstra.dijkstra,
     "A*": a_star.a_star,
+    "Bidirectional BFS": bi_bfs.bidirectional_bfs,
 }
 
 # Define request model
 class GridRequest(BaseModel):
-    algorithm: Literal["BFS", "DFS", "Dijkstra", "A*"]
+    algorithm: Literal["BFS", "DFS", "Dijkstra", "A*", "Bidirectional BFS"]
     rows: int
     cols: int
     start: dict
