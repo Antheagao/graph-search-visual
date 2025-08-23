@@ -25,6 +25,7 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
               <option>BFS</option>
               <option>Dijkstra</option>
               <option>A*</option>
+              <option>Bidirectional BFS</option>
             </select>
           </label>
 
