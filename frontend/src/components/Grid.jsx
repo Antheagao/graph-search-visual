@@ -1,13 +1,20 @@
 import React, { useState, useEffect } from "react";
 
 function Grid({ rows, cols, gridData, start, end, visitedNodes, pathNodes }) {
-  const maxCellSize = 17;
+  const maxCellSize = 17;   // Maximum cell size
+  const minCellSize = 8;    // Minimum cell size for small screens
   const [cellSize, setCellSize] = useState(maxCellSize);
 
   const calculateCellSize = () => {
-    const widthSize = Math.floor(window.innerWidth / cols);
-    const heightSize = Math.floor(window.innerHeight / rows);
-    setCellSize(Math.min(widthSize, heightSize, maxCellSize));
+    const sidebarWidth = window.innerWidth * 0.16; // assuming left bar ~16% width
+    const containerWidth = window.innerWidth - sidebarWidth - 16; // subtract padding
+    const containerHeight = window.innerHeight - 16; // vertical padding
+
+    const widthSize = Math.floor(containerWidth / cols);
+    const heightSize = Math.floor(containerHeight / rows);
+
+    // Keep cell within min/max bounds
+    setCellSize(Math.max(minCellSize, Math.min(widthSize, heightSize, maxCellSize)));
   };
 
   useEffect(() => {
@@ -20,7 +27,7 @@ function Grid({ rows, cols, gridData, start, end, visitedNodes, pathNodes }) {
   const pathSet = new Set(pathNodes.map(([r, c]) => `${r}-${c}`));
 
   return (
-    <div className="flex justify-center items-center h-full w-full bg-neutral-900 p-4">
+    <div className="flex justify-center items-center h-full w-full bg-neutral-900 p-4 overflow-auto">
       <div
         className="grid border-2 border-gray-400 rounded-lg shadow-lg"
         style={{
@@ -28,8 +35,8 @@ function Grid({ rows, cols, gridData, start, end, visitedNodes, pathNodes }) {
           gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
           gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
           gap: "1px",
-          backgroundColor: "#1f2937", // Tailwind gray-800, subtle behind cells
-          padding: "2px", // small padding inside border
+          backgroundColor: "#1f2937", // Tailwind gray-800
+          padding: "2px",
         }}
       >
         {gridData.map((row, rIdx) =>

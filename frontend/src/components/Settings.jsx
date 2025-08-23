@@ -7,7 +7,7 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
   };
 
   return (
-    <div className="w-1/6 bg-neutral-900 p-6 border-r border-gray-700 flex flex-col justify-between">
+    <div className="w-64 md:w-1/5 lg:w-1/6 min-w-[200px] bg-neutral-900 p-6 border-r border-gray-700 flex flex-col justify-between">
       
       {/* Top Section: Algorithm & Controls */}
       <div className="flex flex-col gap-6">
@@ -19,7 +19,7 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
             <select
               value={settings.algorithm}
               onChange={handleAlgorithmChange}
-              className="mt-1 p-2 rounded-md bg-neutral-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="mt-1 w-full p-2 rounded-md bg-neutral-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
             >
               <option>A*</option>
               <option>Bidirectional BFS</option>
@@ -103,7 +103,7 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
 
       {/* Footer with copyright */}
       <div className="text-gray-400 text-sm mt-4 text-center">
-        &copy; 2025 Anthony Mendez
+        &copy; {new Date().getFullYear()} Anthony Mendez
       </div>
     </div>
   );

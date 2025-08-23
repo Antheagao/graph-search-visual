@@ -4,6 +4,8 @@ import Settings from './components/Settings';
 import Grid from './components/Grid';
 
 function App() {
+  const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+
   const solve = async () => {
     const payload = {
       algorithm: settings.algorithm,
@@ -15,7 +17,7 @@ function App() {
     };
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/solve', {
+      const response = await fetch(`${API_URL}/solve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
@@ -63,7 +65,7 @@ function App() {
   };
 
   const [settings, setSettings] = useState({
-    algorithm: "DFS",
+    algorithm: "A*",
     rows: 50,
     cols: 50,
   });
