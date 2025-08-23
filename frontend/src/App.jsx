@@ -4,7 +4,9 @@ import Settings from './components/Settings';
 import Grid from './components/Grid';
 
 function App() {
-  const API_URL = import.meta.env.VITE_API_URL || "http://127.0.0.1:8000";
+  const API_BASE =
+    (import.meta.env.VITE_API_URL ?? "").replace(/\/+$/, "") || // e.g. https://graph-search-visual.onrender.com
+    (window.location.hostname === "localhost" ? "http://127.0.0.1:8000" : ""); // same-origin fallback
 
   const solve = async () => {
     const payload = {
@@ -17,7 +19,7 @@ function App() {
     };
 
     try {
-      const response = await fetch(`${API_URL}/solve`, {
+      const response = await fetch(`${API_BASE}/solve`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
