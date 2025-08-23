@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import Literal, List
-from algorithms import bfs, dfs, dijkstra, a_star, bi_bfs
+from .algorithms import bfs, dfs, dijkstra, a_star, bi_bfs
 
 
 app = FastAPI() 
