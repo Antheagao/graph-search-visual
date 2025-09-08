@@ -13,7 +13,7 @@ Built with **React (JavaScript)** for the interactive frontend and **Python Fast
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 **Frontend**: [React](https://reactjs.org/) • JavaScript • CSS  
 **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python)  
 **Deployment**: Frontend → Vercel • Backend → Render  
@@ -33,3 +33,4 @@ Built with **React (JavaScript)** for the interactive frontend and **Python Fast
 <img src="./screenshots/graph-bar.png" width="1000" alt="selection bar">
 <em>Selection bar to switch algorithm</em>
 <br><br>
+
