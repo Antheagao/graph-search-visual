@@ -22,7 +22,6 @@ Built with **React (JavaScript)** for the interactive frontend and **Python Fast
 
 ## 📸 Screenshots
 
-```markdown
 <img src="./screenshots/character-rater-ss-1.png" width="1000" alt="Home Page">
 <em>Home Page</em>
 <br><br>
