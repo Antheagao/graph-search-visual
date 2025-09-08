@@ -22,6 +22,14 @@ Built with **React (JavaScript)** for the interactive frontend and **Python Fast
 
 ## 📸 Screenshots
 
-<img src="./screenshots/character-rater-ss-1.png" width="1000" alt="Home Page">
+<img src="./screenshots/graph-home.png" width="1000" alt="Home Page">
 <em>Home Page</em>
+<br><br>
+
+<img src="./screenshots/graph-solved.png" width="1000" alt="solved screen">
+<em>Solution with A-star</em>
+<br><br>
+
+<img src="./screenshots/graph-bar.png" width="1000" alt="selection bar">
+<em>Selection bar to switch algorithm</em>
 <br><br>
