@@ -101,6 +101,10 @@ The backend can be deployed to any platform that supports Python/FastAPI (e.g., 
 <em>Algorithm Solution Visualization</em>
 <br><br>
 
+<img src="./screenshots/graph-bar.png" width="1000" alt="selection bar">
+<em>Selection bar to switch algorithm</em>
+<br><br>
+
 ---
 
 ## 📝 Project Structure
