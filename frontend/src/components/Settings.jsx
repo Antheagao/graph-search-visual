@@ -57,7 +57,7 @@ function Settings({ settings, setSettings, onSolve, stats, onResetWalls }) {
           </div>
           <div className="flex justify-between">
             <span>Time taken:</span>
-            <span>{(stats.time * 1000).toFixed(2)} µs</span>
+            <span>{(stats.time * 1000).toFixed(2)} ms</span>
           </div>
           <div className="flex justify-between">
             <span>Nodes expanded:</span>

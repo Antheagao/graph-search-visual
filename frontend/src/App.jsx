@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import './App.css';
 import Settings from './components/Settings';
 import Grid from './components/Grid';
 
@@ -18,6 +17,16 @@ function App() {
       cols: settings.cols,
     };
 
+    // Reset visualization before solving
+    setVisitedNodes([]);
+    setPathNodes([]);
+    setStats({
+      solved: false,
+      time: 0,
+      nodesExpanded: 0,
+      pathLength: 0,
+    });
+
     try {
       const response = await fetch(`${API_BASE}/solve`, {
         method: 'POST',
@@ -25,12 +34,20 @@ function App() {
         body: JSON.stringify(payload),
       });
 
-      const result = await response.json();
-      console.log(result);
+      // Check if response is ok
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ detail: 'Unknown error' }));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
 
-      // reset visualization
-      setVisitedNodes([]);
-      setPathNodes([]);
+      const result = await response.json();
+
+      // Validate response structure
+      if (!result.stats || !Array.isArray(result.visited) || !Array.isArray(result.path)) {
+        throw new Error('Invalid response format from server');
+      }
+
+      // Update stats immediately
       setStats({
         solved: result.stats.solved,
         time: result.stats.time,
@@ -41,7 +58,7 @@ function App() {
       const visitedOrder = result.visited || [];
       const path = result.path || [];
 
-      // animate visited nodes
+      // Animate visited nodes
       visitedOrder.forEach((node, i) => {
         setTimeout(() => {
           setVisitedNodes((prev) => [...prev, node]);
@@ -52,7 +69,7 @@ function App() {
         }, i * 5); // 5ms per visited node
       });
 
-      // animate path after all visited nodes
+      // Animate path after all visited nodes
       setTimeout(() => {
         path.forEach((node, i) => {
           setTimeout(() => {
@@ -62,7 +79,14 @@ function App() {
       }, visitedOrder.length * 5);
 
     } catch (error) {
-      console.error('Error sending grid to backend:', error);
+      console.error('Error solving pathfinding problem:', error);
+      // Update stats to show error state
+      setStats((prevStats) => ({
+        ...prevStats,
+        solved: false,
+      }));
+      // Optionally show user-friendly error message
+      alert(`Failed to solve: ${error.message}. Please check your connection and try again.`);
     }
   };
 
@@ -80,7 +104,7 @@ function App() {
   });
 
   const [start, setStart] = useState({ row: 0, col: 0 });
-  const [end, setEnd] = useState({ row: settings.rows - 1, col: settings.cols - 1 });
+  const [end, setEnd] = useState({ row: 49, col: 49 }); // Default to 50x50 grid
 
   const [gridData, setGridData] = useState(
     Array(settings.rows)
@@ -112,10 +136,11 @@ function App() {
 
   const redoWalls = generateGrid;
 
-  // ✅ call generateGrid when component mounts
+  // Update end position when grid dimensions change
   useEffect(() => {
+    setEnd({ row: settings.rows - 1, col: settings.cols - 1 });
     generateGrid();
-  }, []); // empty dependency array ensures it runs once
+  }, [settings.rows, settings.cols]); // Regenerate grid when dimensions change
 
   return (
     <div className="h-screen w-screen flex">

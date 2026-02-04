@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 
 function Grid({ rows, cols, gridData, start, end, visitedNodes, pathNodes }) {
-  const maxCellSize = 17;   // Maximum cell size
+  const maxCellSize = 17;   // Maximum cell size in pixels
   const minCellSize = 8;    // Minimum cell size for small screens
   const [cellSize, setCellSize] = useState(maxCellSize);
 
   const calculateCellSize = () => {
-    const sidebarWidth = window.innerWidth * 0.16; // assuming left bar ~16% width
-    const containerWidth = window.innerWidth - sidebarWidth - 16; // subtract padding
-    const containerHeight = window.innerHeight - 16; // vertical padding
+    const sidebarWidth = window.innerWidth * 0.16; // Left sidebar ~16% width
+    const containerWidth = window.innerWidth - sidebarWidth - 16; // Subtract padding
+    const containerHeight = window.innerHeight - 16; // Vertical padding
 
     const widthSize = Math.floor(containerWidth / cols);
     const heightSize = Math.floor(containerHeight / rows);
@@ -23,8 +23,15 @@ function Grid({ rows, cols, gridData, start, end, visitedNodes, pathNodes }) {
     return () => window.removeEventListener("resize", calculateCellSize);
   }, [rows, cols]);
 
-  const visitedSet = new Set(visitedNodes.map(([r, c]) => `${r}-${c}`));
-  const pathSet = new Set(pathNodes.map(([r, c]) => `${r}-${c}`));
+  // Memoize sets to avoid recalculating on every render
+  const visitedSet = useMemo(
+    () => new Set(visitedNodes.map(([r, c]) => `${r}-${c}`)),
+    [visitedNodes]
+  );
+  const pathSet = useMemo(
+    () => new Set(pathNodes.map(([r, c]) => `${r}-${c}`)),
+    [pathNodes]
+  );
 
   return (
     <div className="flex justify-center items-center h-full w-full bg-neutral-900 p-4 overflow-auto">
