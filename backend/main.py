@@ -18,7 +18,12 @@ app = FastAPI(title="Graph Search Visualizer API", version="1.0.0")
 # Enable CORS for frontend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://graph-search-visual.vercel.app"],
+    allow_origins=[
+        "https://graph-search-visual.vercel.app",
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:3000",
+    ],
     allow_origin_regex=r"^https://graph-search-visual.*\.vercel\.app$",
     allow_methods=["*"],
     allow_headers=["*"],
