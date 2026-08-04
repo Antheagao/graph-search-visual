@@ -1,5 +1,7 @@
 # Graph Search Visualizer
 
+[![CI](https://github.com/Antheagao/graph-search-visual/actions/workflows/ci.yml/badge.svg)](https://github.com/Antheagao/graph-search-visual/actions/workflows/ci.yml)
+
 A full-stack pathfinding visualization platform that demonstrates and compares classic graph search algorithms including **A\***, **Dijkstra**, **BFS**, **DFS**, and **Bidirectional BFS**.  
 Built with **React (JavaScript)** for the interactive frontend and **Python FastAPI** for the backend algorithm engine.
 

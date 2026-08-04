@@ -103,7 +103,7 @@ function App() {
     pathLength: 0,
   });
 
-  const [start, setStart] = useState({ row: 0, col: 0 });
+  const [start] = useState({ row: 0, col: 0 });
   const [end, setEnd] = useState({ row: 49, col: 49 }); // Default to 50x50 grid
 
   const [gridData, setGridData] = useState(
