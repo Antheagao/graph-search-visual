@@ -18,7 +18,7 @@ Built with **React (JavaScript)** for the interactive frontend and **Python Fast
 ## 🛠️ Tech Stack
 **Frontend**: [React](https://reactjs.org/) • JavaScript • Tailwind CSS • Vite  
 **Backend**: [FastAPI](https://fastapi.tiangolo.com/) (Python) • Pydantic  
-**Deployment**: Frontend → Vercel • Backend → Render  
+**Deployment target**: Frontend → Vercel • Backend → Render (no live demo yet — deploy is intent, not done)  
 
 ---
 
@@ -55,6 +55,16 @@ Built with **React (JavaScript)** for the interactive frontend and **Python Fast
    ```
    
    The API will be available at `http://127.0.0.1:8000`
+
+### Tests
+
+```bash
+cd backend
+pip install -r requirements-dev.txt
+pytest
+```
+
+Covers all five algorithms (contiguous/valid paths, wall handling, unreachable ends, shortest-path length where each algorithm actually guarantees it) plus a `POST /solve` API smoke test.
 
 ### Frontend Setup
 
@@ -138,7 +148,7 @@ graph-search-visual/
 ## 🧪 Algorithms Implemented
 
 - **A\*** - Optimal pathfinding with heuristic guidance
-- **Dijkstra** - Shortest path in weighted graphs
+- **Dijkstra** - Uniform edge costs here (no weights anywhere in this grid), so it's equivalent to BFS on this grid — included for comparison
 - **BFS** - Guaranteed shortest path in unweighted graphs
 - **DFS** - Depth-first exploration (may not find shortest path)
 - **Bidirectional BFS** - Efficient two-way search
