@@ -46,31 +46,16 @@ def assert_contiguous_valid_path(
 
 @pytest.mark.parametrize("name", ALGORITHMS)
 def test_empty_1x1_grid_start_equals_end(name):
-    """A 1x1 open grid where start == end should be solved immediately.
-
-    KNOWN BUG: bidirectional_bfs (backend/algorithms/bi_bfs.py) returns
-    found=False here. It seeds start_visited={start: None} and
-    end_visited={end: None} but never checks for that overlap before
-    entering the main loop - it only checks for a meeting point when a
-    *newly expanded neighbor* lands in the other side's visited set. Since
-    a 1x1 grid has no neighbors to expand, the pre-existing overlap between
-    start and end is never detected. This test pins current (buggy)
-    behavior rather than fixing the algorithm - see final report.
-    """
+    """A 1x1 open grid where start == end should be solved immediately."""
     grid = [[0]]
     start = end = (0, 0)
     fn = ALGORITHMS[name]
     result = fn(grid, start, end)
 
     assert result["visited"][0] == start
-
-    if name == "bi_bfs":
-        assert result["found"] is False
-        assert result["path"] == []
-    else:
-        assert result["found"] is True
-        assert result["path"] == [start]
-        assert result["nodes_expanded"] > 0
+    assert result["found"] is True
+    assert result["path"] == [start]
+    assert result["nodes_expanded"] > 0
 
 
 @pytest.mark.parametrize("name", ALGORITHMS)
@@ -126,11 +111,12 @@ def test_start_on_a_wall_is_still_searched_from(name):
     assert result["path"][-1] == end
 
 
-@pytest.mark.parametrize("name", ["bfs", "dfs", "dijkstra", "a_star"])
+@pytest.mark.parametrize("name", ALGORITHMS)
 def test_end_on_a_wall_is_unreachable(name):
     """Unlike start, a walled end can never be reached: neighbor expansion
     always checks is_valid() (grid == 0) before a cell is queued, so a
-    walled end is never added to the frontier via normal expansion."""
+    walled end is never added to the frontier via normal expansion. bi_bfs
+    also wall-checks its end seed explicitly for the same reason."""
     grid = [
         [1, 0, 0],
         [0, 0, 0],
@@ -142,24 +128,6 @@ def test_end_on_a_wall_is_unreachable(name):
 
     assert result["found"] is False
     assert result["path"] == []
-
-
-def test_bi_bfs_end_on_a_wall_is_reachable_unlike_the_others():
-    """KNOWN QUIRK: bi_bfs seeds end_visited={end: None} directly, the
-    same way it seeds start, so a walled end (like a walled start) is
-    still treated as reachable - inconsistent with bfs/dfs/dijkstra/a_star
-    above. This pins that actual, inconsistent behavior."""
-    grid = [
-        [1, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-    ]
-    start, end = (0, 1), (0, 0)
-    result = bi_bfs.bidirectional_bfs(grid, start, end)
-
-    assert result["found"] is True
-    assert result["path"][0] == start
-    assert result["path"][-1] == end
 
 
 @pytest.mark.parametrize("name", sorted(SHORTEST_PATH_ALGORITHMS))

@@ -32,6 +32,32 @@ def bidirectional_bfs(grid: List[List[int]], start: Tuple[int, int], end: Tuple[
     m, n = len(grid), len(grid[0])
     # 4-directional movement: right, down, left, up
     directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+    start_time = time.time()
+
+    # start == end resolves immediately, before any wall check - this mirrors
+    # bfs/dfs/dijkstra/a_star, which never check the start cell's wall status
+    # either and return found on the first pop regardless.
+    if start == end:
+        return {
+            "found": True,
+            "time_taken": time.time() - start_time,
+            "nodes_expanded": 1,
+            "path": [start],
+            "visited": [start]
+        }
+
+    # A walled end can never be reached - consistent with bfs/dfs/dijkstra/
+    # a_star, which only ever add a cell to a frontier via is_valid() (grid
+    # == 0). Without this check, seeding end_visited with a walled end let
+    # bi_bfs "find" a path the other four algorithms correctly reject.
+    if grid[end[0]][end[1]] == 1:
+        return {
+            "found": False,
+            "time_taken": time.time() - start_time,
+            "nodes_expanded": 0,
+            "path": [],
+            "visited": []
+        }
 
     # Two queues for bidirectional search
     start_queue = deque([start])
@@ -43,7 +69,6 @@ def bidirectional_bfs(grid: List[List[int]], start: Tuple[int, int], end: Tuple[
 
     visited_order = []
     nodes_expanded = 0
-    start_time = time.time()
 
     def reconstruct_path(meeting_point: Tuple[int, int]) -> List[Tuple[int, int]]:
         """Reconstruct the full path from start to end through the meeting point."""
